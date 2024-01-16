@@ -1,0 +1,38 @@
+name: Node.js Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Check if tests passed
+      run: |
+        test_exit_code=$?
+        if [ $test_exit_code -eq 0 ]; then
+          echo "Tests passed!"
+        else
+          echo "Tests failed!"
+          exit $test_exit_code
+        fi
